@@ -13,6 +13,7 @@ function redirectIfNotBlacklisted() {
     return;
   }
 
+  // Pycharm Hello World
   // Redirect if on any blacklisted domain
   if (!blacklist.some(domain => currentDomain.includes(domain))) {
     return;
