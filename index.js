@@ -5,6 +5,9 @@ function redirectIfNotBlacklisted() {
     'facebook.com',
     'meta.com',
     'tiktok.com',
+    'x.com',
+    'fivethirtyeight.com',
+    'nypost.com',
     'instagram.com'
   ];
 
