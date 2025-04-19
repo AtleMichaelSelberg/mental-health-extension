@@ -38,9 +38,42 @@ function redirectIfNotBlacklisted() {
 
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', redirectIfNotBlacklisted);
-} else {
-  redirectIfNotBlacklisted(); // DOM is already loaded, run directly
-}
+(function() {
+  let lastUrl = location.href;
 
+  function checkUrlChange() {
+    if (location.href !== lastUrl) {
+      lastUrl = location.href;
+      redirectIfNotBlacklisted();
+    }
+  }
+
+  // initial run
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      redirectIfNotBlacklisted();
+      lastUrl = location.href;
+    });
+  } else {
+    redirectIfNotBlacklisted();
+    lastUrl = location.href;
+  }
+
+  // catch history API
+  ['pushState', 'replaceState'].forEach(fn => {
+    const orig = history[fn];
+    history[fn] = function(...args) {
+      const ret = orig.apply(this, args);
+      checkUrlChange();
+      return ret;
+    };
+  });
+
+  // catch back/forward & hash
+  window.addEventListener('popstate',  checkUrlChange);
+  window.addEventListener('hashchange', checkUrlChange);
+
+  // fallback for SPA nav (e.g. YouTube): detect DOM mutations
+  new MutationObserver(checkUrlChange)
+      .observe(document, { subtree: true, childList: true });
+})();
