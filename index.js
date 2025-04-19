@@ -1,28 +1,41 @@
+function isYouTubeHomepage() {
+  const host = window.location.hostname
+      .toLowerCase()
+      .replace(/^www\./, '');
+  const topLevelYoutubes = [
+      'youtube.com',
+      'm.youtube.com',
+  ]
+  return topLevelYoutubes.some(domain => host === domain)
+      && (window.location.pathname === '' || window.location.pathname === '/')
+      && window.location.search === ''
+      && window.location.hash === '';
+}
+
+
 function redirectIfNotBlacklisted() {
-  const currentDomain = window.location.hostname.toLowerCase().replace(/^www\./, '');
+  const hostname = window.location.hostname;
+  const currentDomain = hostname.trim().toLowerCase().replace(/^www\./, '');
   const blacklist = [
-    'youtube.com',
     'facebook.com',
     'meta.com',
     'tiktok.com',
     'x.com',
     'fivethirtyeight.com',
     'nypost.com',
-    'instagram.com'
   ];
-
-  // Allow music.youtube.com
-  if (currentDomain.includes('music.youtube.com')) {
-    return;
-  }
 
   // Pycharm Hello World
   // Redirect if on any blacklisted domain
-  if (!blacklist.some(domain => currentDomain === domain)) {
-    return
+  if (blacklist.some(domain => currentDomain === domain)) {
+    window.location.href = 'https://xkcd.com';
   }
 
-  window.location.href = 'https://xkcd.com';
+  console.log(hostname)
+  if (isYouTubeHomepage()) {
+    window.location.href = 'https://www.youtube.com/watch?v=iyEZWhYrp30';
+  }
+
 }
 
 if (document.readyState === 'loading') {
