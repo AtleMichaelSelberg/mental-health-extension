@@ -1,17 +1,26 @@
+const topLevelYoutubes = [
+  'youtube.com',
+  'm.youtube.com',
+]
+
+const isYoutubeDomain = (host) => {
+  return topLevelYoutubes.some(domain => host === domain)
+}
+
 function isYouTubeHomepage() {
   const host = window.location.hostname
       .toLowerCase()
       .replace(/^www\./, '');
-  const topLevelYoutubes = [
-      'youtube.com',
-      'm.youtube.com',
-  ]
-  return topLevelYoutubes.some(domain => host === domain)
+
+  return isYoutubeDomain(host)
       && (window.location.pathname === '' || window.location.pathname === '/')
       && window.location.search === ''
       && window.location.hash === '';
 }
 
+const clearYoutubeRecs = () => {
+  document.querySelectorAll("ytd-watch-next-secondary-results-renderer").forEach(el => el.remove());
+}
 
 function redirectIfNotBlacklisted() {
   const hostname = window.location.hostname;
@@ -31,10 +40,18 @@ function redirectIfNotBlacklisted() {
     window.location.href = 'https://xkcd.com';
   }
 
-  console.log(hostname)
   if (isYouTubeHomepage()) {
     window.location.href = 'https://www.youtube.com/watch?v=iyEZWhYrp30';
   }
+
+  if (isYoutubeDomain(currentDomain)) {
+    const observer = new MutationObserver(() => {
+      clearYoutubeRecs()
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
 
 }
 
