@@ -20,6 +20,7 @@ function isYouTubeHomepage() {
 
 const clearYoutubeRecs = () => {
   document.querySelectorAll("ytd-watch-next-secondary-results-renderer").forEach(el => el.remove());
+  document.querySelectorAll(".videowall-endscreen").forEach(el => el.remove());
 }
 
 function redirectIfNotBlacklisted() {
