@@ -33,6 +33,7 @@ function redirectIfNotBlacklisted() {
     'x.com',
     'fivethirtyeight.com',
     'nypost.com',
+    'instagram.com',
   ];
 
   // Pycharm Hello World
